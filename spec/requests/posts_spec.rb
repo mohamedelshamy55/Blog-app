@@ -2,40 +2,34 @@ require 'rails_helper'
 
 RSpec.describe 'Posts', type: :request do
   describe 'GET /index' do
-    before(:each) do
-      get '/users/:user_id/posts'
+    before(:example) { get user_posts_path(1) }
+
+    it 'should be a success' do
+      expect(response).to have_http_status(:ok)
     end
 
-    it 'http request is successfull' do
-      expect(response).to have_http_status(:success)
+    it "should render 'index' template" do
+      expect(response).to render_template('index')
     end
 
-    it 'renders correct template' do
-      expect(response).to render_template(:index)
-    end
-
-    it 'renders correct placeholder text' do
-      expect(response.body).to include('Posts index page')
+    it 'should return the correct placeholder text' do
+      expect(response.body).to include('Here is a list of posts for all users')
     end
   end
-end
 
-RSpec.describe 'Posts', type: :request do
-  describe 'GET /index' do
-    before(:each) do
-      get '/users/:user_id/posts/:id'
+  describe 'GET /show' do
+    before(:example) { get user_post_path(1, 2) }
+
+    it 'should be a success' do
+      expect(response).to have_http_status(:ok)
     end
 
-    it 'http request is successfull' do
-      expect(response).to have_http_status(:success)
+    it "should render 'show' template" do
+      expect(response).to render_template('show')
     end
 
-    it 'renders correct template' do
-      expect(response).to render_template(:show)
-    end
-
-    it 'renders correct placeholder text' do
-      expect(response.body).to include('Posts show page')
+    it 'should return the correct placeholder text' do
+      expect(response.body).to include('Here is a list of posts for a specific user')
     end
   end
 end
