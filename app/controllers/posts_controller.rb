@@ -7,32 +7,35 @@ class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
     @user = @post.author
-    # @user = User.find(params[:id])
     @comments = @post.comments
   end
 
   def new
     @post = Post.new
-    render :new, locals: { post: @post }
   end
 
   def create
+    # new object from params
     @user = User.find(params[:user_id])
-    @new_post = @user.posts.new(post_params)
+    @new_post = @user.posts.new(post_parms)
     @new_post.likes_counter = 0
     @new_post.comment_counter = 0
     respond_to do |format|
       format.html do
         if @new_post.save
+          flash.alert = 'Successful created'
           redirect_to "/users/#{@new_post.author.id}/posts/", notice: 'Created Successfully'
+
         else
-          render :new, alert: 'Failed to Create!'
+          render :new, alert: 'Failed to create'
         end
       end
     end
   end
 
-  def post_params
+  private
+
+  def post_parms
     params.require(:post).permit(:title, :text)
   end
 end

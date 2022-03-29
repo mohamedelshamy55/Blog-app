@@ -1,16 +1,15 @@
 Rails.application.routes.draw do
-  # get 'users/:user_id/posts' => 'posts#index', as: 'user_posts'
-  # get 'users/:user_id/posts/:id' => 'posts#show', as: 'user_post'
-  # get 'users' => 'users#index', as: 'users'
-  # get 'users/:id' => 'users#show', as: 'user'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  root 'users#index'
-  resources :users, only: %i[index show] do
-    resources :posts, only: %i[index show new create]
-  end
 
+  root to: 'users#index'
+  resources :users, only: %i[show index] do
+  resources :posts, only: %i[index create new show]
+  end
   resources :posts do
     resources :comments, only: %i[create new]
-    resources :likes, only: [:create]
+    resources :likes, only: %i[create]
   end
 end
+
+
+# root 'users#index' resources :users, only: [:index, :show] do resources :posts, only: [:index, :show] end 

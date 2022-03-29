@@ -1,12 +1,9 @@
-<div class="create-post-c">
-    <h2 class ="post-create-header">Create a post</h2>
-    <%= form_with model: @post, url: user_posts_path, scope: :post, html: {class: "post-form-c"} do |form| %>
-        <div class="post-title-c">
-            <%= form.text_field :title, placeholder: "Title", required: true %>
-        </div>
-        <div class="post-text-c">
-            <%= form.text_area :text, placeholder: "Type here...", rows: 20, required: true %>
-        </div>
-        <%= form.submit "Post", class: "submit-btn" %>
-    <% end %>
-</div>
+<%= form_with model: @post, url: user_posts_path, method: :post, local: true, scope: :post do |f| %>
+    <div class="post-title-c">            
+        <%= f.text_field :title, placeholder: "Title", required: true %>
+    </div>
+    <div class="post-text-c">
+        <%= f.text_area :text, placeholder: "Type here...", rows: 20, required: true %>
+    </div>
+    <%= f.submit "Post", class: "submit-btn" %>
+<% end %>

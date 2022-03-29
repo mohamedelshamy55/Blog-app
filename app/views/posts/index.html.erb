@@ -1,33 +1,23 @@
-<div class="user-container">
-    <div class="user-data">
-        <div class="user-img">
-      <%= image_tag("Tom.png", width:'150px', height:'170px') %>
-    </div>
-      <h2><%= @user.name%></h2>
-      <p>Number of posts: <%= @user.post_ids.count %></p>
-    </div>
-  </div>
+<h1>users post </h1>
 
-<% @posts.each do |post| %>
-  <div class="user-container">
-    <div class="post-data">
-     <%= link_to "#{post.title}", user_post_path(@user.id, post.id), class:"post-title" %> 
-     <h3><%= post.text%></h3>
-      <p>Number of comments: <%= post.author.comment_ids.count %> <span>Number of likes: <%= post.likes_counter %></span></p>
-    </div>
-  </div>
-  <div class="comments">
-    <% post.recent_comments.each do |comment| %>
-       <h2><%= comment.author.name%>: <%= comment.text%></h2>
-    <%end%>
-  </div>
-<%end%>
-<div>
-  <button class="button"> <%= link_to "Create a post",  new_user_post_path(@user), {:class => "button_class"} %> </button>
+ <div>
+    <%= image_tag( "id.png", height: '150px',width:'100%', :style => "border-radius: 10px")%>
+    <h2> <%= @user.name %> </h2>
+      <p>Number Of Posts: <%= @user.post_ids.count%></p>
 </div>
-<div class="button-div">
-  <button class="button">
-    Pagination
-  </button>
+<% @posts.each do |post|%>
+<h2> <%= link_to "#{post.title}", user_post_path(@user.id, post.id) %>  </h2>
+    <h1>Post Title:<%= post.text%></h1>
+    <p>Comment(s): <%= post.author.comment_ids.count%></p>
+    <p>Likes(s): <%= post.likes_counter%></p>
+    <% post.recent_comments.each do |comment| %>
+    <p><%= comment.author.name%> :<%= comment.text %></p>
+    <% end %>
+<%end%>
+ <div>
+ <div>
+<button class="button"> <%= link_to "Create a post",  new_user_post_path(@user), {:class => "button_class"} %> </button>
+</div>
 
+ <button>Pagination</button>
 </div>
