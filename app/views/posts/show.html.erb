@@ -1,18 +1,20 @@
-<h1>This is user post</h1>
-Post # <%= params[:id] %>
- <h3> <%= @post.title %> by <%= @user.name %> </h3>
- <%= @post.text %>
- 
- <%= form_with url: "/posts/#{@post.id}/likes", scope: :like do |form| %>
-    <%= form.submit "Like ", class: "post-like-btns"%>
-  <% end %>
-
- <p>comment_counter:<%= @post.author.comment_ids.count%><span></p>
-<p>Likes(s): <%= @post.likes_counter%></p>
-
-  <% @comments.each do |comment| %>
-      <p><%= comment.author.name %>: <%= comment.text %></p>
-    <% end %>
-    <div>
-    <%= render partial: "create_comments", local: { post: @post } %>
+<nav class="fs-6 p-3 container mt-2 p-2 bio">
+  <%= link_to "Home", root_path %>
+</nav>
+<div>
+  <div>
+    <div class="border border-3 border-dark container p-2 my-5 bio">
+      <div class="d-flex justify-content-between my-3">
+        <h4><%= @post.title %> by <%= @user.name %></h4>
+        <p>Comments : <%= @post.comments.size%>  Likes : <%= @post.likes.size %> </p>
+      </div>
+        <p><%= @post.text %> </p>
+    </div>
+    <ul class="border border-3 border-dark container p-2 my-5 bio">
+      <% @post.comments.each do |c| %>
+        <li><%= c.author.name %>: <%= c.text%></li>
+      <% end %>
+    </ul>
+    <%= render "comments/create" %>
   </div>
+</div>

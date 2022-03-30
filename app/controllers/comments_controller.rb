@@ -1,24 +1,14 @@
 class CommentsController < ApplicationController
-  def new
-    @comment = Comment.new
-  end
-
   def create
     @post = Post.find(params[:post_id])
-    @new_comment = @post.comments.new(
-      text: comment_params,
-      author_id: @post.id,
-      post_id: @post.id
-    )
-    @new_comment.post_id = @post.id
-    @new_comment.update_comments_counter
+    @comment = @post.comments.create(text: comment_parameters[:text], author_id: current_user.id, post_id: @post.id)
+
     respond_to do |format|
       format.html do
-        if @new_comment.save
-          redirect_to "/users/#{@post.author_id}/posts/#{@post.id}", notice: 'Success!'
-          # redirect_to user_post_path(@post.id, Post.find(params[:post_id]))
+        if @comment.save
+          redirect_to user_post_path(@post.author.id, @post.id), notice: 'Comment created successfully'
         else
-          render :new, alert: 'Failed to Create!'
+          redirect_to user_post_path(@post.author.id, @post.id), alert: 'Comment not created, try again!'
         end
       end
     end
@@ -26,7 +16,7 @@ class CommentsController < ApplicationController
 
   private
 
-  def comment_params
-    params.require(:comment).permit(:text)[:text]
+  def comment_parameters
+    params.require(:comment).permit(:text)
   end
 end

@@ -1,13 +1,8 @@
-<h1>users index</h1>
-<% @users.each do |user| %>
 <div>
-<%= image_tag("id.png", size: "100x100", :alt => "user foto")%>
-<div>
-<%= link_to user_path(user.id) do %>
-  User: <%= user.name %><br>
-  <%end%>
-    <p class="posts">Number Of Posts: <%= user.post_ids.count%></p>
+  <% @users.each do |user| %>
+    <%= link_to user_path(user.id) do %>
+      <%= render partial: "user_profile", locals: {user: user} %>
+    <% end %>
+  <% end %>
 </div>
-</div>
-<% end %>
 
