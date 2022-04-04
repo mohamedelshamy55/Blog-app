@@ -30,14 +30,18 @@ To get a local copy up and running follow these simple example steps.
 - To run the project run `rails s` in your command prompt.
 - To run the test run `rspec` in your command prompt.
 
-## Author
+## Authors
 👤 **Mohamed ELShamy**
 
 - GitHub: [@mohamedelshamy55](https://github.com/mohamedelshamy55)
 - Twitter: [@moelshamy55](https://mobile.twitter.com/moelshamy55)
 - LinkedIn: [mohamedelshamy85](https://www.linkedin.com/in/mohamedelshamy85/)
 
+👤 **Olatunji Azeem**
 
+- GitHub: [@zemola](https://github.com/zemola)
+- Twitter: [@zemolat](https://mobile.twitter.com/zemolat)
+- LinkedIn: [olatunjiazeem](https://www.linkedin.com/in/olatunjiazeem/)
 
 ## 🤝 Contributing
 
