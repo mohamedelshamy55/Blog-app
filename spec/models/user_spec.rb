@@ -1,27 +1,36 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'User model' do
-    subject { User.new(name: 'Ranjeet', photo: 'ranjeet.png', bio: 'Software programmer', posts_counter: 0) }
+  describe 'validations' do
+    subject { User.new(name: 'Anna', bio: 'Hello! My name is Juliana.') }
+
     before { subject.save }
 
-    it 'check the name is not blank' do
+    it 'name should be present' do
       subject.name = nil
       expect(subject).to_not be_valid
     end
 
-    it 'check if posts counter is numeric' do
-      subject.posts_counter = 'not-numeric'
+    it 'bio should be present' do
+      subject.bio = nil
       expect(subject).to_not be_valid
     end
 
-    it 'check if posts counter is equal or greater than zero' do
-      expect(subject.posts_counter).to be >= 0
+    it 'User should have post greater than or equal to 0' do
+      subject.posts_counter = -1
+      expect(subject).to_not be_valid
     end
 
-    it 'shows three recent posts' do
+    it 'User should have post greater than or equal to 0' do
+      subject.posts_counter = 0
+      expect(subject).to be_valid
+    end
+  end
+
+  describe 'Should test recent post method' do
+    before { 4.times { |post| Post.create(author: subject, title: "This is post #{post}") } }
+
+    it 'user should have three recent posts' do
       expect(subject.recent_posts).to eq(subject.posts.last(3))
     end
   end
