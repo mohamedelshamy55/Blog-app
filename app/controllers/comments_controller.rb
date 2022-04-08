@@ -6,24 +6,27 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if @comment.save
-          redirect_to user_post_path(@post.author.id, @post.id), notice: 'Comment created successfully'
+          redirect_to user_post_path(@post.author_id, @post.id), notice: 'Comment saved successfully'
         else
-          redirect_to user_post_path(@post.author.id, @post.id), alert: 'Comment not created, try again!'
+          redirect_to user_post_path(@post.author_id, @post.id), alert: 'Error, Comment not created!'
         end
       end
     end
   end
 
   def destroy
-    previous_url = request.env['HTTP_REFERER']
-    comment_to_delete = Comment.find(params[:id])
+    @post = Post.find_by(id: params[:post_id])
+    @comment = Comment.find(params[:id])
 
-    if comment_to_delete.destroy
-      flash[:notice] = 'Comment Deleted successfully!'
-    else
-      flash[:alert] = 'Unable to delete comment Try again later'
+    respond_to do |format|
+      format.html do
+        if @comment.destroy
+          redirect_to user_post_path(@post.author_id, @post.id), notice: 'Comment deleted successfully'
+        else
+          redirect_to user_post_path(@post.author_id, @post.id), alert: 'Error, Comment not deleted!'
+        end
+      end
     end
-    redirect_to(previous_url)
   end
 
   private

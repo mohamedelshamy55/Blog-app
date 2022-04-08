@@ -4,25 +4,26 @@ class PostsController < ApplicationController
   skip_authorize_resource only: [:all_posts]
 
   def index
-    @user = User.includes(:posts).find(params[:user_id])
+    @user = User.includes(:posts).find_by(id: params[:user_id])
+    @posts = @user.recent_posts
   end
 
   def show
-    @user = @user = User.find(params[:user_id])
+    @user = User.find_by(id: params[:user_id])
     @post = @user.posts.includes(:comments, :likes).find(params[:id])
   end
 
   def new
-    @current = current_user
+    @post = Post.new
   end
 
   def create
-    new_post = current_user.posts.build(post_params)
+    @post = current_user.posts.build(post_params)
 
     respond_to do |format|
       format.html do
-        if new_post.save
-          redirect_to user_post_path(new_post.author_id, new_post.id), notice: 'Post created successfully'
+        if @post.save
+          redirect_to user_post_path(@post.author_id, @post.id), notice: 'Post has been successfully created!'
         else
           render :new, alert: 'Post not created. Please try again!'
         end
@@ -31,12 +32,12 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @user = current_user
-    @post = @user.posts.find(params[:id])
-    @post.comments.destroy_all
-    @post.likes.destroy_all
-    @post.destroy
-    redirect_to user_posts_path(@user.id), notice: 'Post deleted'
+    @post = Post.find(params[:id])
+    if @post.destroy
+      redirect_to user_posts_path(@post.author_id), notice: 'Post has been successfully deleted!'
+    else
+      redirect_to user_post_path(@post.user.id, @post.id), alert: 'Post not deleted. Please try again!'
+    end
   end
 
   private

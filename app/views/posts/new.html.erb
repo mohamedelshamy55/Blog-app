@@ -1,9 +1,15 @@
-<ul class="nav justify-content-center bg-light text-white">
-  <li class="nav-item">
-    <%= link_to "Back", :back, class: "nav-link" %>
-  </li>
-</ul>
-<h3 class="fs-2 p-3 container mt-2 p-2 bio"> Create Your Post</h3>
-<div>
-  <%= render "post_form" %>
-</div>
+<%= render "/users/back" %>
+<section class="create-post">
+  <h2>Create Post</h2>
+
+  <%= form_with model: @post, url: user_posts_path, scope: :post, html: {class: "post-form"} do |form| %>
+    <div class="title">
+      <%= form.label :title, "Post Title" %>
+      <%= form.text_field :title, placeholder: "Your Title...", required: true %>
+    </div>
+
+    <%= form.text_area :text, size: "100x20", placeholder: "Type your post here...", required: true %>
+
+    <%= form.submit "Create Post", disable_with: "Please wait...", class: "post-btn" %>
+  <% end %>
+</section>

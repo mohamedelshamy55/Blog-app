@@ -10,15 +10,15 @@
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
   config.jwt do |jwt|
-    jwt.secret = '10f94de68be053de7362db7d1bb5dba85ba456970f2c7fe58986b5f78c123d7ca4a4056d74bc79fa1e51c1910c1c118e3fc539f289bc11dc82a110571c915840'
+    jwt.secret = '2c7c57930d8ecacaa0d2d48f8966bf13cddd00e1bdf3ae4f65d047a20fefe4b58aed562a88f47d8b78548195ec91cf3e219c12dd3efa597b8f8c309884bed8f0'
   end
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '1baaf9a86bd10b4e722cec158e0f125b54130974408e6ddc98c00c41716b6d2694003911a8326f021de3564582786aaecbc683d77604cc551e276c6de02e326a'
-  
+  # config.secret_key = 'c3531b7d07f0ce60defcf8e71a5834539ea429eee5bb470b296db28b4560d907f6215d7b3924bbe802e55834df168151cb6d292dcc2faebceaa8972e4452fdd4'
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
@@ -129,7 +129,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '4aaca2819ef41383475e1ab774b8b23da49d38626ef035cdd094008a2f75eb45fb99efcf5b587f1b178ce75e175cbb24d84110169c1b3f7fc6a4ed359c0a7484'
+  # config.pepper = '99493ce050098d48710c45c3e60dfea01dea23d564fb499b84da6e2bc470010691402ab6844f6f623bba3ce5239cd91f10a0e23f48a5d896824250f736401772'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false

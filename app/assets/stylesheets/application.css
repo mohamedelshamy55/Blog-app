@@ -14,61 +14,21 @@
  *= require_self
  */
 
-.user_wrapper {
-  width: 100%;
-  margin: 0 auto;
+.alert {
+  text-align: center;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 
-.display {
-  color: #222;
-  width: 70%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  column-gap: 10%;
-  margin-bottom: 20px;
+.alert-success {
+  background-color: green;
 }
 
-.user_list {
-  padding: 10px;
-  border: 2px solid #333;
-  width: 100%;
-}
-
-.num_post {
-  align-self: flex-end;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.bio {
-  width: 70%;
-}
-
-.button {
-  width: 10%;
-  text-align: center;
-}
-
-.msg {
-  width: 70%;
-  margin: 20px auto;
-  display: flex;
-  align-items: center;
-}
-
-input::placeholder,
-textarea::placeholder {
-  font-style: italic;
-}
-
-.zebra:nth-child(odd) {
-  background-color: #f4f4f4;
+.alert-danger {
+  background-color: red;
 }

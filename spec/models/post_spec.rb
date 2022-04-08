@@ -1,42 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'validations' do
-    user = User.create(name: 'Anna', bio: 'Hello! My name is Juliana.', posts_counter: 0)
+  describe 'Post Model Validations' do
+    user = User.create(name: 'Dammy', bio: 'Dammy is so cool!')
     subject do
-      Post.new(title: 'This is first post', text: 'Hello! My name is Juliana.', author: user, comments_counter: 2,
-               likes_counter: 2)
+      Post.new(title: 'Bootstrap vs Tailwind', text: 'Let\'s  talk about Bootstrap and Tailwind', author_id: user)
     end
 
     before { subject.save }
 
-    it 'title should be present' do
+    it 'checks if title is valid' do
       subject.title = nil
       expect(subject).to_not be_valid
     end
 
-    it 'title should not be greater than 250 characters' do
-      subject.title = 'Hello'
-      expect(subject).to be_valid
+    it 'checks if title has more than 250 characters' do
+      expect(subject.title.length).to be <= 250
     end
 
-    it 'comments counter should be integer' do
-      subject.comments_counter = 2
-      expect(subject).to be_valid
-    end
-
-    it 'comments counter should be greater than or equal to 0' do
-      subject.comments_counter = -1
+    it 'validates that comments counter is an integer' do
+      subject.comments_counter = 'jdj'
       expect(subject).to_not be_valid
     end
 
-    it 'likes counter should be greater than or equal to 0' do
+    it 'validates that comments counter is greater than or equal to 0' do
+      subject.comments_counter = -5.5
+      expect(subject).to_not be_valid
+    end
+
+    it 'validates that likes counter is an integer' do
+      subject.likes_counter = 'abc'
+      expect(subject).to_not be_valid
+    end
+
+    it 'validates that likes counter is greater than or equal to 0' do
       subject.likes_counter = -1
-      expect(subject).to_not be_valid
-    end
-
-    it 'likes counter should be integer' do
-      subject.likes_counter = 2.2
       expect(subject).to_not be_valid
     end
 
