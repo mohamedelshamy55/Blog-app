@@ -1,16 +1,22 @@
 class LikesController < ApplicationController
+  skip_before_action :authenticate_request
+
   def create
-    @post = Post.find(params[:post_id])
-    @like = @post.likes.create(author_id: current_user.id, post_id: @post.id)
+    @like = current_user.likes.new(like_params)
 
     respond_to do |format|
-      format.html do
-        if @like.save
-          redirect_to user_post_path(@post.author.id, @post.id), notice: 'Liked 👍'
-        else
-          redirect_to user_post_path(@post.author.id, @post.id), alert: 'Like not added'
-        end
-      end
+      flash[:notice] = if @like.save
+                         'Successfully created a like'
+                       else
+                         'Failed to create a like'
+                       end
+      format.html { redirect_to request.path }
     end
+  end
+
+  private
+
+  def like_params
+    params.require(:like).permit(:author_id, :post_id)
   end
 end

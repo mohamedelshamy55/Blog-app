@@ -1,21 +1,21 @@
-<nav class="fs-6 p-3 container mt-2 p-2 bio">
-  <%= link_to "Home", root_path %>
-</nav>
-<div>
-  <div>
-    <div class="border border-3 border-dark container p-2 my-5 bio">
-      <div class="d-flex justify-content-between my-3">
-        <h4><%= @post.title %> by <%= @user.name %></h4>
-        <p>Comments : <%= @post.comments.size%> Likes : <%= @post.likes.size %> </p>
-        
-      </div>
-      <p><%= @post.text %> </p>
-      <% if can? :destroy, @post %>
-      <%= link_to "Delete", user_post_path(@user.id, @post.id), method: :delete, data: {disable_with: "Deleting..."}, class: "btn btn-danger mb-3"%>
+<section class="d-flex w-100 pt-5 pb-5 justify-content-center">
+  <div class="w-50">
+    <% user = User.where(id: params[:user_id])[0] %>
+    <% if user %>
+      <% post = user.posts.where(id: params[:id])[0] %>
+      <% if post %>
+        <%= render partial: 'posts/post', locals: { user: user, post: post, show_author: true } %>
+        <div class="mt-4">
+          <% post.comments.each do |comment| %>
+            <%= render partial: 'posts/comment', locals: { comment: comment } %>
+          <% end %>
+          <%= render partial: 'posts/add_comment' %>
+        </div>
+      <% else %>
+        <h2>For user with id = <%= params[:user_id] %> there is no post with id = <%= params[:id] %></h2>
       <% end %>
-    </div>
-    
-    <%= render "layouts/coomcard" %>
-    <%= render "comments/comment_form" %>
+    <% else %>
+      <h2>There is no user with id = <%= params[:user_id] %></h2>
+    <% end %>
   </div>
-</div>
+</section>

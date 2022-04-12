@@ -1,49 +1,75 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'validations' do
-    user = User.create(name: 'Anna', bio: 'Hello! My name is Juliana.', posts_counter: 0)
-    subject do
-      Post.new(title: 'This is first post', text: 'Hello! My name is Juliana.', author: user, comments_counter: 2,
-               likes_counter: 2)
-    end
+  it 'Updates its user\'s posts_counter' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create!(author: user, title: 'Post title', text: 'This is my first post', comments_counter: 0,
+                        likes_counter: 0)
+    post.update_users_posts_counter
+    post.update_users_posts_counter
+    expect(user.posts_counter).to be 2
+  end
 
-    before { subject.save }
+  it 'Gets users 5 most recent comments' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create!(author: user, title: 'Post title', text: 'This is my first post', comments_counter: 0,
+                        likes_counter: 0)
+    first_comment = Comment.create!(post: post, author: user, text: 'Hello there!')
+    second_comment = Comment.create!(post: post, author: user, text: 'How is it going for you, dude?')
+    five_recent_comments = post.last_5_comments
+    expect(five_recent_comments.length).to be 2
+    expect(five_recent_comments[0].id).to be first_comment.id
+    expect(five_recent_comments[1].id).to be second_comment.id
+  end
 
-    it 'title should be present' do
-      subject.title = nil
-      expect(subject).to_not be_valid
-    end
+  it 'Creates invalid post where title, comments_counter, likes_counter are nil' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user)
+    expect(post).to_not be_valid
+  end
 
-    it 'title should not be greater than 250 characters' do
-      subject.title = 'Hello'
-      expect(subject).to be_valid
-    end
+  it 'Creates invalid post where title length is too long' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'WTF?' * 100, comments_counter: 0, likes_counter: 0)
+    expect(post).to_not be_valid
+  end
 
-    it 'comments counter should be integer' do
-      subject.comments_counter = 2
-      expect(subject).to be_valid
-    end
+  it 'Creates invalid post where comments_counter is negative' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'TITLE', comments_counter: -1, likes_counter: 0)
+    expect(post).to_not be_valid
+  end
 
-    it 'comments counter should be greater than or equal to 0' do
-      subject.comments_counter = -1
-      expect(subject).to_not be_valid
-    end
+  it 'Creates invalid post where likes_counter is negative' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'TITLE', comments_counter: 1, likes_counter: -777)
+    expect(post).to_not be_valid
+  end
 
-    it 'likes counter should be greater than or equal to 0' do
-      subject.likes_counter = -1
-      expect(subject).to_not be_valid
-    end
+  it 'Creates invalid post where comments_counter is nil' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'TITLE', comments_counter: nil, likes_counter: 777)
+    expect(post).to_not be_valid
+  end
 
-    it 'likes counter should be integer' do
-      subject.likes_counter = 2.2
-      expect(subject).to_not be_valid
-    end
+  it 'Creates valid post' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'This is a title', comments_counter: 333, likes_counter: 777)
+    expect(post).to be_valid
+  end
 
-    describe 'should test methods in post model' do
-      it 'post should have five recent comments' do
-        expect(subject.recent_comments).to eq(subject.comments.last(5))
-      end
-    end
+  it 'Creates invalid post where title is ""' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: '', comments_counter: 333, likes_counter: 777)
+    expect(post).to_not be_valid
   end
 end

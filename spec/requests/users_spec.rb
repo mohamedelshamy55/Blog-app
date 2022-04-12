@@ -1,35 +1,40 @@
 require 'rails_helper'
+require 'capybara/rspec'
 
 RSpec.describe 'Users', type: :request do
-  describe 'GET /index' do
-    before(:example) { get users_path }
-
-    it 'should be a success' do
-      expect(response).to have_http_status(:ok)
-    end
-
-    it "should render 'index' template" do
+  context 'testing responce' do
+    it 'GET /users' do
+      get('/users')
       expect(response).to render_template('index')
     end
 
-    it 'should return the correct placeholder text' do
-      expect(response.body).to include('Here shows list of users and their posts')
-    end
-  end
-
-  describe 'GET /show' do
-    before(:example) { get user_path(1) }
-
-    it 'should be a success' do
-      expect(response).to have_http_status(:ok)
-    end
-
-    it "should render 'show' template" do
+    it 'GET /users/:user_id' do
+      get('/users/3')
       expect(response).to render_template('show')
     end
 
-    it 'should return the correct placeholder text' do
-      expect(response.body).to include('Here is a particular user')
+    it 'GET /users status 200' do
+      get('/users')
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'GET /users/:user_id/posts/:id status 200' do
+      get('/users/3')
+      expect(response).to have_http_status(:ok)
+    end
+  end
+end
+
+RSpec.describe 'Users', type: :feature do
+  context 'testing with capybara' do
+    it 'visit /users' do
+      visit '/users'
+      expect(page).to have_text('Here is a list users')
+    end
+
+    it 'visit /users/:user_id' do
+      visit '/users/3'
+      expect(page).to have_text('Here is a given user\'s page')
     end
   end
 end

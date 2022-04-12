@@ -1,37 +1,22 @@
-<div>
-<ul class="nav justify-content-center bg-light text-white">
-  <li class="nav-item">
-    <%= link_to "Create Post", new_user_post_path(@user.id), class: "nav-link" %>
-  </li>
-  <li class="nav-item">
-     <%= link_to "Home", root_path,  class: "nav-link" %>
-  </li>
-</ul>
-  <%= render partial: "users/user_profile", locals: { user: @user } %>
-  <ul>
-    <% @user.posts.each do |p| %>
-      <li>
-        <div class="border border-3 border-dark container mt-5 p-2 bio">
-          <%= link_to user_post_path(@user.id, p.id), id: "user_post#{p.id}" do %>
-          <h4><%= p.title%></h4>
-          <% end %>
-          <p><%= p.text%></p>
-          <div>
-            <span>Comments: <%= p.comments.size %></span>
-            <span>Likes: <%= p.comments.size %></span>
-          </div>
-        </div>
-        <div>
-        <% unless p.comments.empty? %>
-          <ul class="border border-3 border-dark container p-2 mt-1 bio">
-            <% p.recent_comments.each do |c| %>
-            <li><%= c.author.name %>: <%= c.text%></li>
-            <% end %>
-          </ul>
+<section class="d-flex w-100 pt-5 pb-5 justify-content-center">
+  <div class="w-50">
+    <% user = User.where(id: params[:user_id])[0] %>
+    <% if user %>
+      <%= render partial: 'users/user_card', locals: { user: user } %>
+      <ul class="w-100 list-inline">
+        <% user.posts.each do |post| %>
+          <li class="w-100 mb-4">
+            <%= render partial: 'posts/post', locals: { user: user, post: post, show_author: false } %>
+            <div class="mt-4">
+              <% post.last_5_comments.each do |comment| %>
+                <%= render partial: 'posts/comment', locals: { comment: comment } %>
+              <% end %>
+            </div>
+          </li>
         <% end %>
-        </div>
-      </li>
+      </ul>
+    <% else %>
+      <h2>There is no user with id = <%= params[:user_id] %></h2>
     <% end %>
-  </ul>
-  <button class="btn btn-primary d-flex justify-content-center align-self-center my-5 button display">Pagination</button>
-</div>
+  </div>
+</section>

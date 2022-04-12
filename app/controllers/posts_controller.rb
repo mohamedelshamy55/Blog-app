@@ -1,47 +1,63 @@
 class PostsController < ApplicationController
-  load_and_authorize_resource
+  skip_before_action :authenticate_request
 
-  skip_authorize_resource only: [:all_posts]
-
-  def index
-    @user = User.includes(:posts).find(params[:user_id])
-  end
+  def index; end
 
   def show
-    @user = @user = User.find(params[:user_id])
-    @post = @user.posts.includes(:comments, :likes).find(params[:id])
+    @post = Post.where(id: params[:id])[0]
   end
 
   def new
-    @current = current_user
+    @post = Post.new
   end
 
   def create
-    new_post = current_user.posts.build(post_params)
+    @post = current_user.posts.new(post_params)
 
     respond_to do |format|
-      format.html do
-        if new_post.save
-          redirect_to user_post_path(new_post.author_id, new_post.id), notice: 'Post created successfully'
-        else
-          render :new, alert: 'Post not created. Please try again!'
-        end
+      if @post.save
+        flash[:notice] = 'Created a post succesfully'
+        format.html { redirect_to "#{users_path}/#{current_user.id}" }
+      else
+        flash[:notice] = 'Failed to create a post. Try again'
+        format.html { render :new }
       end
     end
   end
 
   def destroy
-    @user = current_user
-    @post = @user.posts.find(params[:id])
-    @post.comments.destroy_all
-    @post.likes.destroy_all
-    @post.destroy
-    redirect_to user_posts_path(@user.id), notice: 'Post deleted'
+    post = Post.find(params[:post_id])
+    post.author.decrement!(:posts_counter)
+    post.destroy
+    flash[:notice] = 'Post was successfully removed'
+    splitted_path = params[:url].split('/')
+    splitted_path.pop if splitted_path.length == 7 # If the user removed the post while being on its page
+    redirect_to params[:url]
   end
+
+  # rubocop:disable Naming/AccessorMethodName
+
+  def get_posts
+    id = 0
+    params.each_pair do |key, value|
+      id = JSON.parse(key)['user_id'] if value.nil?
+    end
+    user = User.where(id: id || params[:user_id])[0]
+
+    respond_to do |format|
+      if user
+        format.json { render json: user.posts }
+      else
+        format.json { render json: { success: false, message: ['User must exist'] }, status: 404 }
+      end
+    end
+  end
+
+  # rubocop:enable Naming/AccessorMethodName
 
   private
 
   def post_params
-    params.require(:post).permit(:title, :text)
+    params.require(:post).permit(:author_id, :title, :text, :comments_counter, :likes_counter)
   end
 end

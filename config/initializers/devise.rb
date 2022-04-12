@@ -9,16 +9,13 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.jwt do |jwt|
-    jwt.secret = '10f94de68be053de7362db7d1bb5dba85ba456970f2c7fe58986b5f78c123d7ca4a4056d74bc79fa1e51c1910c1c118e3fc539f289bc11dc82a110571c915840'
-  end
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '1baaf9a86bd10b4e722cec158e0f125b54130974408e6ddc98c00c41716b6d2694003911a8326f021de3564582786aaecbc683d77604cc551e276c6de02e326a'
-  
+  # config.secret_key = '16826e5f1b13a0afb551eab5a7379dc82b83988ba8e82ab4492b067a94f2edfddb7efd8aebeb5a153c3bea201c6e82f1f01f1555e171efa6cbfd6e19049705b3'
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
@@ -129,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '4aaca2819ef41383475e1ab774b8b23da49d38626ef035cdd094008a2f75eb45fb99efcf5b587f1b178ce75e175cbb24d84110169c1b3f7fc6a4ed359c0a7484'
+  # config.pepper = 'dd8a5787e33f4d2821f04aaa771cd06f0056cb69cbb2c390802bb5ac9a586174bded22124287e6396351b7be9309d6ea29e5621bf422dff94ccf3ac6f35d4a46'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -311,4 +308,7 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # TO BE ABLE TO RESET PASSWORD
+  config.navigational_formats = ['*/*', :html, :turbo_stream]
 end
