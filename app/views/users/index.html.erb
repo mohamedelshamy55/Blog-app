@@ -1,11 +1,9 @@
-<section class="user_card">
-  <ul>
-    <% @users.order(:created_at).each do |person| %>
-    <li>
-      <%= link_to user_path(person.id) do %>
-       <%= render partial: "user_details", locals: {user: person} %>
-      <% end %>
-      <% end %>
-    </li>
+<section class="d-flex w-100 pt-5 justify-content-center">
+  <ul class="w-50 list-inline">
+    <% User.all.each do |user| %>
+      <li>
+        <%= render partial: 'users/user_card', locals: { user: user } %>
+      </li>
+    <% end %>
   </ul>
 </section>

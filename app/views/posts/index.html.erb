@@ -1,25 +1,22 @@
-<section>
-  <nav class="nav">
-    <div>
-      <%= render "/users/back" %>
-      <%= render "/users/home" %>
-    </div>
-    <%= link_to "New Post", new_user_post_path(@user.id) %>
-  </nav>
-  <div class="user_card">
-  <%= render partial: "users/user_details", locals: { user: @user } %>
+<section class="d-flex w-100 pt-5 pb-5 justify-content-center">
+  <div class="w-50">
+    <% user = User.where(id: params[:user_id])[0] %>
+    <% if user %>
+      <%= render partial: 'users/user_card', locals: { user: user } %>
+      <ul class="w-100 list-inline">
+        <% user.posts.each do |post| %>
+          <li class="w-100 mb-4">
+            <%= render partial: 'posts/post', locals: { user: user, post: post, show_author: false } %>
+            <div class="mt-4">
+              <% post.last_5_comments.each do |comment| %>
+                <%= render partial: 'posts/comment', locals: { comment: comment } %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <h2>There is no user with id = <%= params[:user_id] %></h2>
+    <% end %>
   </div>
-
-  <div class="post_comments">
-   <% @posts.each do |p| %>
-   <ul class="all_posts posts">
-   <li>
-   <%= render partial: "post_details", locals: { post: p } %>
-   </li>
-   </ul>
-   <%= render partial: "/comments/comments_section", locals: { comments: p.recent_comments } %>
-   <% end %>
-   </div>
-
-   <button class="btn btn-1">Pagination</button>
 </section>

@@ -9,15 +9,12 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.jwt do |jwt|
-    jwt.secret = '2c7c57930d8ecacaa0d2d48f8966bf13cddd00e1bdf3ae4f65d047a20fefe4b58aed562a88f47d8b78548195ec91cf3e219c12dd3efa597b8f8c309884bed8f0'
-  end
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'c3531b7d07f0ce60defcf8e71a5834539ea429eee5bb470b296db28b4560d907f6215d7b3924bbe802e55834df168151cb6d292dcc2faebceaa8972e4452fdd4'
+  # config.secret_key = '16826e5f1b13a0afb551eab5a7379dc82b83988ba8e82ab4492b067a94f2edfddb7efd8aebeb5a153c3bea201c6e82f1f01f1555e171efa6cbfd6e19049705b3'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -129,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '99493ce050098d48710c45c3e60dfea01dea23d564fb499b84da6e2bc470010691402ab6844f6f623bba3ce5239cd91f10a0e23f48a5d896824250f736401772'
+  # config.pepper = 'dd8a5787e33f4d2821f04aaa771cd06f0056cb69cbb2c390802bb5ac9a586174bded22124287e6396351b7be9309d6ea29e5621bf422dff94ccf3ac6f35d4a46'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -311,4 +308,7 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # TO BE ABLE TO RESET PASSWORD
+  config.navigational_formats = ['*/*', :html, :turbo_stream]
 end

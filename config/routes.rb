@@ -2,31 +2,22 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   devise_for :users
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  post '/api/login', to: 'authentication#login'
+  get '/api/posts', to: 'posts#get_posts'
+  get '/api/comments', to: 'comments#get_comments'
+  post '/api/comments', to: 'comments#add_comment'
 
-  devise_scope :user do
-    authenticated :user do
-      root 'users#index', as: :authenticated_root
-    end
-
-    unauthenticated do
-      root 'devise/sessions#new', as: :unauthenticated_root
-    end
-  end
-
-  resources :users, only: [:index, :show] do
-    resources :posts, only: [:index, :new, :create, :show, :destroy]
-  end
-
-  resources :posts do
-    resources :comments, only: [:create, :destroy]
-    resources :likes, only: [:create]
-  end
-
-  namespace :api, defaults: { format: :json } do
-    namespace :v1 do
-      resources :posts, only: [:index] do
-        resources :comments, only: [:index, :create]
-      end
-    end
-  end
+  get '/users/:user_id/posts', to: 'posts#index'
+  get '/posts/new', to: 'posts#new'
+  post '/posts/create', to: 'posts#create'
+  get '/users/:user_id/posts/:id', to: 'posts#show'
+  post '/users/:user_id/posts/:id/like', to: 'likes#create'
+  post '/users/:user_id/posts/:id/create_comment', to: 'comments#create'
+  delete '/comments/delete', to: 'comments#destroy'
+  delete '/users/:user_id/posts/:id/delete', to: 'posts#destroy'
+  get '/users', to: 'users#index'
+  get '/users/:id', to: 'users#show'
+  # Defines the root path route ("/")
+  root 'users#index'
 end

@@ -1,19 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Like, type: :model do
-  describe 'Comment Likes Validations' do
-    subject { Like.new(author_id: 1, post_id: 1) }
-
-    before { subject.save }
-
-    it 'checks if author id is a number' do
-      subject.author_id = '45e%'
-      expect(subject).to_not be_valid
-    end
-
-    it 'checks if post id is a number' do
-      subject.post_id = 'look'
-      expect(subject).to_not be_valid
-    end
+  it 'Increments its post\'s likes_counter three times' do
+    user = User.create!(name: 'Semen Dick', photo: 'https://incels.wiki/images/5/58/Francisco.jpg',
+                        bio: 'Just a pretty boy. Roaaaaarrrrrr', posts_counter: 0)
+    post = Post.create(author: user, title: 'This is a title', comments_counter: 333, likes_counter: 777)
+    like = Like.create(author: user, post: post)
+    like.update_posts_likes_counter
+    like.update_posts_likes_counter
+    like.update_posts_likes_counter
+    expect(post.likes_counter).to be 780
   end
 end

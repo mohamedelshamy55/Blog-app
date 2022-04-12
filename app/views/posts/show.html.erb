@@ -1,20 +1,21 @@
-<div>
-  <%= link_to "Back", user_posts_path(@post.author.id) %>
-  <%= render "/users/home" %>
-  <div class="post">
-    <div class="post_head">
-        <h2 class="post__title"><%= @post.title %> by <%= @post.author.name %></h2>
-      <div class="post__likes_comments_counter">
-        <p class="show-li">Comments : <%= @post.comments.size%>  Likes : <%= @post.likes.size %> </p>
-      </div>
-    </div>
-    <p class="post__text"><%= @post.text %> </p>
-  </div>
-
-    <%= render partial: "/comments/comments_section", locals: { comments: @post.comments } %>
-    <%= render "/comments/comment_form" %>
-    <%= render "/likes/like" %>
-    <% if can? :destroy, @post %>
-      <%= button_to "Delete", user_post_path(@post.author.id, @post.id), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger"%>
+<section class="d-flex w-100 pt-5 pb-5 justify-content-center">
+  <div class="w-50">
+    <% user = User.where(id: params[:user_id])[0] %>
+    <% if user %>
+      <% post = user.posts.where(id: params[:id])[0] %>
+      <% if post %>
+        <%= render partial: 'posts/post', locals: { user: user, post: post, show_author: true } %>
+        <div class="mt-4">
+          <% post.comments.each do |comment| %>
+            <%= render partial: 'posts/comment', locals: { comment: comment } %>
+          <% end %>
+          <%= render partial: 'posts/add_comment' %>
+        </div>
+      <% else %>
+        <h2>For user with id = <%= params[:user_id] %> there is no post with id = <%= params[:id] %></h2>
+      <% end %>
+    <% else %>
+      <h2>There is no user with id = <%= params[:user_id] %></h2>
     <% end %>
-</div>
+  </div>
+</section>
